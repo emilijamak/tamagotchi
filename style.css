@@ -22,7 +22,7 @@ h1 {
 }
 
 .animalCont {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.45);
   border: 2px solid black;
   border-radius: 10px;
   width: 900px;
@@ -76,7 +76,7 @@ h1 {
   width: 1400px;
   height: 650px;
   position: relative;
-  background: white;
+  background: rgba(255, 255, 255, 0.53);
 }
 
 .animalStats img {
