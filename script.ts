@@ -44,12 +44,11 @@ const animalImgArr: string[] = [
     "https://cdn.comic.studio/images/tamagotchi/characters/fcd3399712dff3e9678b20f215f105f7/Melodytchi_blue_large.png",
     "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/04/f9DbkrXpku85kzN9/%E3%81%AD%E3%82%8A%E3%81%82%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png",
     "https://i.pinimg.com/originals/cb/6c/59/cb6c59bb9c4dc15d89aa864379988258.png",
-    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/xLtHM2xgE6JXG5VY/%E3%82%B7%E3%83%A3%E3%82%A4%E3%82%AF%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=c74256c2907e058b53d7899f4729d17a",
+    "https://i.pinimg.com/originals/17/85/23/178523edf405d049929ca1dc69b1692c.png",
     "https://toy.bandai.co.jp/assets/tamagotchi/images/smart/character/75/character.png"
 ];
 
 
-let animalLevel: number = 0;
 let hp: number = 100;
 let hunger: number = 100;
 let fun: number = 100;
@@ -95,30 +94,50 @@ function getImgSrc(callback: (src: string) => void) {
                 startedGameDiv.style.display = "flex";
                 pet.innerHTML = `<img src="${src}" alt="">`;
                 imgAnimalElement = pet.querySelector('img') as HTMLImageElement;
+                console.log(src)
                 if (src === `https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/01/vmvwFIfcQhNWer4p/%E3%81%BE%E3%82%81%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811`) {
-                    console.log('works')
                     pet.innerHTML = `
                     <div class="sprite"></div>
                     `;
                     imgAnimalElement = pet.querySelector('.sprite') as HTMLImageElement;
                     setInterval(() => {
                         const spriteDiv = document.querySelector('.sprite') as HTMLElement
-                        if (hp < 30) {
-                            spriteDiv.style.backgroundPosition = `-${pos}px -280px`
+                        if (hp > 30) {
+                            spriteDiv.style.backgroundPosition = `-${pos}px 0px`
                             pos += 140
                             if (pos > 1260) pos = 0
-                        } if (fun < 30 && hp > 31) {
+                        } else if (fun < 30 && hp > 31) {
                             spriteDiv.style.backgroundPosition = `-${pos}px -140px`
                             pos += 140
                             if (pos > 1260) pos = 0
                         }
                         else {
-                            spriteDiv.style.backgroundPosition = `-${pos}px 0`
+                            spriteDiv.style.backgroundPosition = `-${pos}px -280px`
                             pos += 140
                             if (pos > 1260) pos = 0
                         }
 
                     }, 400)
+                } else if (src === `https://i.pinimg.com/originals/17/85/23/178523edf405d049929ca1dc69b1692c.png`) {
+                    console.log('does it?')
+                    pet.innerHTML = `
+                    <div class="spriteTwo"></div>
+                    `;
+                    const spriteDiv = document.querySelector('.spriteTwo') as HTMLElement
+                    imgAnimalElement = pet.querySelector('.spriteTwo') as HTMLImageElement;
+                   setInterval(() => {
+                       if (hp > 30) {
+                           spriteDiv.style.backgroundPosition = `-${pos}px 0px`
+                           pos += 126
+                           if (pos > 1260) pos = 0
+                       } else if (hp < 30) {
+                           spriteDiv.style.backgroundPosition = `-${pos}px -255px`
+                           pos += 126
+                           if (pos > 1260) pos = 0
+                       }
+
+                   }, 500)
+
                 }
             }
         }
@@ -130,7 +149,7 @@ function updateStats() {
     hunger = Math.max(0, Math.min(100, hunger));
     fun = Math.max(0, Math.min(100, fun));
 
-    console.log(`Updating stats: hp=${hp}, hunger=${hunger}, fun=${fun}`);
+    // console.log(`Updating stats: hp=${hp}, hunger=${hunger}, fun=${fun}`);
 
     hpBarColored.style.width = `${hp}%`;
     funBarColored.style.width = `${fun}%`;
