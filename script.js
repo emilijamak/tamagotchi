@@ -5,7 +5,7 @@ const chooseAnimalDiv = document.querySelector('.chooseAnimal');
 const level = document.querySelector('.level');
 const startedGameDiv = document.querySelector('.startedGameDiv');
 const pet = document.querySelector('.petCont');
-const imgAnimalElement = pet.querySelector('img');
+let imgAnimalElement = pet.querySelector('img');
 const hpBarColored = document.querySelector('.hpBarColored');
 const hungryBarColored = document.querySelector('.hungryBarColored');
 const funBarColored = document.querySelector('.funBarColored');
@@ -18,33 +18,54 @@ const tilesContainer = document.querySelector('.tiles');
 const colors = ['aqua', 'aquamarine', 'crimson', 'blue', 'dodgerblue', 'gold', 'greenyellow', 'teal'];
 const colorsPicklist = [...colors, ...colors];
 const tileCount = colorsPicklist.length;
-// Game state
 let revealedCount = 0;
 let activeTile = null;
 let awaitingEndOfMove = false;
-const foodImgArr = ["https://cdn.icon-icons.com/icons2/1529/PNG/512/u10t-render_106717.png", "https://cdn.icon-icons.com/icons2/1529/PNG/512/q-mark-copy_106724.png", "https://static.vecteezy.com/system/resources/thumbnails/013/743/633/small/banana-pixel-art-png.png", "https://www.pikpng.com/pngl/b/526-5262846_pixels-cute-kawaii-bunny-tumblr-food-snacks-kawaii.png", "https://64.media.tumblr.com/e991a29b07be29e3dd03786a1246290b/tumblr_o7y9of6xHm1uosm2eo1_400.png"];
-const animalImgArr = ["https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/F4WxefuBqQy3sq2g/%E3%81%86%E3%83%BC%E3%81%B1%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811", "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/bfBUa57Abv7s6Aon/%E3%82%81%E3%82%81%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811", "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/CgoIIIEPHSIiOR8d/%E3%81%B4%E3%81%93%E3%81%A1%E3%82%85%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png", "https://tiermaker.com/images/template_images/2022/15436473/tamagotchi-all-characters-v2-15436473/chamametchipng.png", "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/01/vmvwFIfcQhNWer4p/%E3%81%BE%E3%82%81%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811", "https://cdn.comic.studio/images/tamagotchi/characters/fcd3399712dff3e9678b20f215f105f7/Melodytchi_blue_large.png", "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/04/f9DbkrXpku85kzN9/%E3%81%AD%E3%82%8A%E3%81%82%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png", "https://i.pinimg.com/originals/cb/6c/59/cb6c59bb9c4dc15d89aa864379988258.png", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2Godx3IZDQzIuWZLZx-RIp4TcujDv-wDEHqIFKt7Fg&s", "https://toy.bandai.co.jp/assets/tamagotchi/images/smart/character/75/character.png"];
+let height = 200;
+let pos = 0;
+const foodImgArr = [
+    "https://cdn.icon-icons.com/icons2/1529/PNG/512/u10t-render_106717.png",
+    "https://cdn.icon-icons.com/icons2/1529/PNG/512/q-mark-copy_106724.png",
+    "https://static.vecteezy.com/system/resources/thumbnails/013/743/633/small/banana-pixel-art-png.png",
+    "https://www.pikpng.com/pngl/b/526-5262846_pixels-cute-kawaii-bunny-tumblr-food-snacks-kawaii.png",
+    "https://64.media.tumblr.com/e991a29b07be29e3dd03786a1246290b/tumblr_o7y9of6xHm1uosm2eo1_400.png"
+];
+const animalImgArr = [
+    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/F4WxefuBqQy3sq2g/%E3%81%86%E3%83%BC%E3%81%B1%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811",
+    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/bfBUa57Abv7s6Aon/%E3%82%81%E3%82%81%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811",
+    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/CgoIIIEPHSIiOR8d/%E3%81%B4%E3%81%93%E3%81%A1%E3%82%85%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png",
+    "https://tiermaker.com/images/template_images/2022/15436473/tamagotchi-all-characters-v2-15436473/chamametchipng.png",
+    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/01/vmvwFIfcQhNWer4p/%E3%81%BE%E3%82%81%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811",
+    "https://cdn.comic.studio/images/tamagotchi/characters/fcd3399712dff3e9678b20f215f105f7/Melodytchi_blue_large.png",
+    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/04/f9DbkrXpku85kzN9/%E3%81%AD%E3%82%8A%E3%81%82%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png",
+    "https://i.pinimg.com/originals/cb/6c/59/cb6c59bb9c4dc15d89aa864379988258.png",
+    "https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/03/xLtHM2xgE6JXG5VY/%E3%82%B7%E3%83%A3%E3%82%A4%E3%82%AF%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=c74256c2907e058b53d7899f4729d17a",
+    "https://toy.bandai.co.jp/assets/tamagotchi/images/smart/character/75/character.png"
+];
 let animalLevel = 0;
 let hp = 100;
-let hunger = 5;
-let fun = 5;
+let hunger = 100;
+let fun = 100;
 let isEating = false;
+let petLevel = 0;
+updateStats();
 function updateAnimalLevel() {
-    level.innerHTML = `<h2>Animal level: ${animalLevel}</h2>`;
+    level.innerHTML = `<h2>Animal level: ${petLevel}</h2>`;
+    growAnimal();
 }
 function appendAnimals() {
+    animalsCont.innerHTML = '';
     animalImgArr.forEach((animal, index) => {
         animalsCont.innerHTML += `
             <div class="animal">
-                    <img src=${animal} alt="">
+                <img src="${animal}" alt="">
             </div>
-    
-    `;
+        `;
     });
 }
 function chooseAnimal() {
     const animals = document.querySelectorAll('.animal');
-    [...animals].forEach((animal, index) => {
+    animals.forEach((animal, index) => {
         animal.onclick = () => {
             animals.forEach(animal => animal.classList.remove('chosenOne'));
             animal.classList.add('chosenOne');
@@ -58,18 +79,48 @@ function getImgSrc(callback) {
             const imgElement = chosenAnimal.querySelector('img');
             if (imgElement) {
                 const src = imgElement.src;
-                callback(src); // Pass the src to the callback
+                callback(src);
                 chooseAnimalDiv.style.display = "none";
                 startedGameDiv.style.display = "flex";
-                pet.innerHTML = `
-                    <img src="${src}" alt="">
-                `;
-                // console.log(src)
+                pet.innerHTML = `<img src="${src}" alt="">`;
+                imgAnimalElement = pet.querySelector('img');
+                if (src === `https://tamagotchi-official.com/tamagotchi/jp/character/2023/06/01/vmvwFIfcQhNWer4p/%E3%81%BE%E3%82%81%E3%81%A3%E3%81%A1_%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97%E6%AD%A3%E6%96%B9%E5%BD%A2.png?_=fbe8e1d70c59de270f8ccebd25b27811`) {
+                    console.log('works');
+                    pet.innerHTML = `
+                    <div class="sprite"></div>
+                    `;
+                    imgAnimalElement = pet.querySelector('.sprite');
+                    setInterval(() => {
+                        const spriteDiv = document.querySelector('.sprite');
+                        if (hp < 30) {
+                            spriteDiv.style.backgroundPosition = `-${pos}px -280px`;
+                            pos += 140;
+                            if (pos > 1260)
+                                pos = 0;
+                        }
+                        if (fun < 30 && hp > 31) {
+                            spriteDiv.style.backgroundPosition = `-${pos}px -140px`;
+                            pos += 140;
+                            if (pos > 1260)
+                                pos = 0;
+                        }
+                        else {
+                            spriteDiv.style.backgroundPosition = `-${pos}px 0`;
+                            pos += 140;
+                            if (pos > 1260)
+                                pos = 0;
+                        }
+                    }, 400);
+                }
             }
         }
     };
 }
 function updateStats() {
+    hp = Math.max(0, Math.min(100, hp));
+    hunger = Math.max(0, Math.min(100, hunger));
+    fun = Math.max(0, Math.min(100, fun));
+    console.log(`Updating stats: hp=${hp}, hunger=${hunger}, fun=${fun}`);
     hpBarColored.style.width = `${hp}%`;
     funBarColored.style.width = `${fun}%`;
     hungryBarColored.style.width = `${hunger}%`;
@@ -92,13 +143,20 @@ function updateStats() {
         hungryBarColored.style.backgroundColor = "#a96100";
     }
 }
+function growAnimal() {
+    const baseSize = 200;
+    const newSize = baseSize + petLevel * 10;
+    if (imgAnimalElement) {
+        imgAnimalElement.style.width = `${newSize}px`;
+        imgAnimalElement.style.height = `${newSize}px`;
+    }
+}
 getImgSrc((src) => {
-    console.log(src); // You can log the src or perform any other action if needed
+    console.log(src);
 });
 appendAnimals();
 chooseAnimal();
 updateAnimalLevel();
-updateStats();
 setInterval(() => {
     hunger -= 10;
     fun -= 10;
@@ -109,15 +167,19 @@ setInterval(() => {
         }
     }
     updateStats();
-}, 100000);
+}, 10000);
+setInterval(() => {
+    if (fun > 80 && hunger > 80 && hp > 80) {
+        petLevel += 1;
+        updateAnimalLevel();
+    }
+}, 20000);
 feedBtn.onclick = () => {
-    if (hunger <= 100) {
+    if (hunger < 100) {
         if (!isEating) {
             isEating = true;
             hunger += 5;
-            snack.innerHTML = `
-        <img src=${foodImgArr[Math.floor(Math.random() * foodImgArr.length)]} alt="">
-        `;
+            snack.innerHTML = `<img src="${foodImgArr[Math.floor(Math.random() * foodImgArr.length)]}" alt="">`;
             snack.style.display = "block";
             setTimeout(() => {
                 snack.style.display = "none";
@@ -126,7 +188,7 @@ feedBtn.onclick = () => {
             }, 2000);
         }
         else {
-            alert(`I'm still eating!!!!!!`);
+            alert("I'm still eating!");
         }
     }
     else {
@@ -134,62 +196,61 @@ feedBtn.onclick = () => {
     }
 };
 playBtn.onclick = () => {
-    if (fun <= 100) {
+    if (fun < 100) {
         memoryGameDiv.style.display = "flex";
         playGame();
     }
 };
 function playGame() {
-    function buildTile(color) {
-        const element = document.createElement('div');
-        element.classList.add('tile');
-        element.setAttribute("data-color", color);
-        element.setAttribute("data-revealed", 'false');
-        element.addEventListener("click", () => {
-            const revealed = element.getAttribute('data-revealed');
-            if (awaitingEndOfMove || revealed === 'true' || element === activeTile) {
-                return;
-            }
-            element.style.backgroundColor = color;
-            if (!activeTile) {
-                activeTile = element;
-                return;
-            }
-            const colorToMatch = activeTile.getAttribute("data-color");
-            if (colorToMatch === color) {
-                activeTile.setAttribute("data-revealed", 'true');
-                element.setAttribute("data-revealed", 'true');
-                activeTile = null;
-                awaitingEndOfMove = false;
-                revealedCount += 2;
-                if (revealedCount === tileCount) {
-                    alert('You win!');
-                    memoryGameDiv.style.display = "none";
-                    fun = 100;
-                    updateStats();
+    if (tilesContainer) {
+        function buildTile(color) {
+            const element = document.createElement('div');
+            element.classList.add('tile');
+            element.setAttribute("data-color", color);
+            element.setAttribute("data-revealed", 'false');
+            element.addEventListener("click", () => {
+                const revealed = element.getAttribute('data-revealed');
+                if (awaitingEndOfMove || revealed === 'true' || element === activeTile) {
+                    return;
                 }
-                return;
-            }
-            awaitingEndOfMove = true;
-            setTimeout(() => {
-                if (element && activeTile) {
-                    // @ts-ignore
-                    element.style.backgroundColor = null;
-                    // @ts-ignore
-                    activeTile.style.backgroundColor = null;
-                    awaitingEndOfMove = false;
+                element.style.backgroundColor = color;
+                if (!activeTile) {
+                    activeTile = element;
+                    return;
+                }
+                const colorToMatch = activeTile.getAttribute("data-color");
+                if (colorToMatch === color) {
+                    activeTile.setAttribute("data-revealed", 'true');
+                    element.setAttribute("data-revealed", 'true');
                     activeTile = null;
+                    awaitingEndOfMove = false;
+                    revealedCount += 2;
+                    if (revealedCount === tileCount) {
+                        alert('You win!');
+                        memoryGameDiv.style.display = "none";
+                        fun = 100;
+                        updateStats();
+                    }
+                    return;
                 }
-            }, 1000);
-        });
-        return element;
-    }
-    for (let i = 0; i < tileCount; i++) {
-        const randomIndex = Math.floor(Math.random() * colorsPicklist.length);
-        const color = colorsPicklist[randomIndex];
-        const tile = buildTile(color);
-        colorsPicklist.splice(randomIndex, 1);
-        if (tilesContainer) {
+                awaitingEndOfMove = true;
+                setTimeout(() => {
+                    if (element && activeTile) {
+                        element.style.backgroundColor = '';
+                        activeTile.style.backgroundColor = '';
+                        awaitingEndOfMove = false;
+                        activeTile = null;
+                    }
+                }, 1000);
+            });
+            return element;
+        }
+        const colorsTemp = [...colorsPicklist];
+        for (let i = 0; i < tileCount; i++) {
+            const randomIndex = Math.floor(Math.random() * colorsTemp.length);
+            const color = colorsTemp[randomIndex];
+            const tile = buildTile(color);
+            colorsTemp.splice(randomIndex, 1);
             tilesContainer.appendChild(tile);
         }
     }

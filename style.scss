@@ -198,7 +198,7 @@ h1 {
   left: 800px;
   animation: fadeIn 2s;
   img {
-    height: 60px;
+    height: 80px;
 
   }
 }
@@ -220,6 +220,16 @@ h1 {
 .gameCont {
   padding-bottom: 20px;
 }
+
+.sprite {
+  background-image: url("https://www.spriters-resource.com/download/182528/");
+  background-size: 1400px;
+  background-position: 0 0;
+  height: 140px;
+  width: 130px;
+}
+
+
 @keyframes moveAround {
   0% {top: 0}
   50% {top: 50px; right: 0}

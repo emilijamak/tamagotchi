@@ -204,7 +204,7 @@ h1 {
   animation: fadeIn 2s;
 }
 .snack img {
-  height: 60px;
+  height: 80px;
 }
 
 .tiles {
@@ -224,6 +224,14 @@ h1 {
 
 .gameCont {
   padding-bottom: 20px;
+}
+
+.sprite {
+  background-image: url("https://www.spriters-resource.com/download/182528/");
+  background-size: 1400px;
+  background-position: 0 0;
+  height: 140px;
+  width: 130px;
 }
 
 @keyframes moveAround {
